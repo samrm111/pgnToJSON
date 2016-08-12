@@ -7,18 +7,16 @@ var Parser = function() {
 
         if (dataToParse != "") {
             var tmpGames = dataToParse.split(/^([0-9]+.*)(1-0|0-1|1\/2-1\/2)$/m);
-            var games = [];
+            var parsedData = [];
 
-            console.log(tmpGames);
 
             // Merge odd with pair positions of array together
             for (var i = 0; i <= tmpGames.length; i++) {
-                console.log(i);
                 if ((i == 0 || (i % 3) == 0) && (i + 1) <= tmpGames.length && typeof tmpGames[i + 1] !== 'undefined') {
                     // Merge with last i
                     var currentGame = (tmpGames[i] + tmpGames[i + 1]).split('\n\n');
 
-                    var headers = currentGame[0].replace('\[|\]', '').split('\n');
+                    var headers = currentGame[0].replace(/^\n|\[.*(?=(".*"))|\"|\]/gm, '').split('\n');
                     var body = currentGame[1].replace();
                     var info = {};
 
@@ -31,18 +29,17 @@ var Parser = function() {
                         info['white'] = headers[4];
                         info['black'] = headers[5];
                         info['result'] = headers[6];
-                    } catch (Exception e) {
+                    } catch (e) {
                         throw {message : "Invalid PGN File.", name : "InvalidPGNFileException"};
                     }
 
                     //Headers
-                    games.push({
-                        info : info
-                        moves :
+                    parsedData.push({
+                        info : info,
+                        moves : body
                     });
                 }
             }
-            console.log(games);
         }
 
         if (typeof cb == 'function') {
@@ -52,7 +49,7 @@ var Parser = function() {
         if (typeof pngData == 'function') {
             return pngData(parsedData);
         }
-
+        
         return parsedData;
     };
 
