@@ -1,6 +1,6 @@
 {
   "name": "pgnToJSON",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A simple PGN (Portable Game Notation) to JSON library in javascript",
   "author": "Samuel Rondeau-Millaire <contact@samrm.io>",
   "private": false,
